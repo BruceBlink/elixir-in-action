@@ -7,7 +7,7 @@ defmodule DatabaseServer do
     receive do
       {:run_query, caller, query_def} ->
         query_result = run_query(query_def)
-        send(caller, {:query_result, result})
+        send(caller, {:query_result, query_result})
     end
     loop()
   end
@@ -20,6 +20,14 @@ defmodule DatabaseServer do
 
   def run_async(server_pid, query_def) do
     send(server_pid, {:run_query, self(), query_def})
+  end
+
+  def get_result do
+    receive do
+      {:query_result, result} -> result
+    after
+      5000 -> {:error, :timeout} # Timeout after 5 seconds
+    end
   end
 
 end
