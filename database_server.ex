@@ -1,21 +1,24 @@
 defmodule DatabaseServer do
   def start do
-    spawn(&loop/0)
+    spawn(fn ->
+      connection = :rand.uniform(1000) # Simulate a database connection
+      loop(connection)
+    end)
   end
 
-  defp loop do
+  defp loop(connection) do
     receive do
       {:run_query, caller, query_def} ->
-        query_result = run_query(query_def)
+        query_result = run_query(connection, query_def)  # Simulate a database query execution
         send(caller, {:query_result, query_result})
     end
-    loop()
+    loop(connection)
   end
 
-  defp run_query(query_def) do
+  defp run_query(connection, query_def) do
     # Simulate a database query execution
-    Process.sleep(1000) # Simulate delay
-    "#{query_def} result"
+    Process.sleep(2000) # Simulate delay
+    "Connection #{connection}: #{query_def} result"
   end
 
   def run_async(server_pid, query_def) do

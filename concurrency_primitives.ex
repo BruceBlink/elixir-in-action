@@ -32,3 +32,14 @@ get_result =
       {:query_result, result} -> result
     end
   end
+
+  # 进程池
+  pool = Enum.map(1..100, fn _ -> DatabaseServer.start() end)
+  Enum.each(
+    1..5,
+    fn query_def ->
+      server_pid = Enum.at(pool, :rand.uniform(length(pool)) - 1)
+      DatabaseServer.run_async(server_pid, query_def)
+  end)
+# 这里是一个模拟的查询函数
+Enum.map(1..5, fn _ -> DatabaseServer.get_result() end)
