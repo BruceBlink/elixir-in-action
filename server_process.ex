@@ -38,8 +38,8 @@ defmodule KeyValueStore do
   end
   def handle_call({:get, key}, state) do
     value = Map.get(state, key)  # 获取值
-    {:ok, value, state}  # 返回响应和当前状态
+    {value, state}  # 返回响应和当前状态
     # 可以简写如下形式
-    # {:ok, Map.get(state, key)}
+    # {Map.get(state, key) ,state}
   end
 end
