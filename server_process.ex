@@ -25,3 +25,21 @@ defmodule ServerProce do
   end
 
 end
+
+defmodule KeyValueStore do
+  def init do
+    %{}  # 初始化状态为一个空的 Map
+  end
+  def handle_call({:put, key, value}, state) do
+    new_state = Map.put(state, key, value)  # 更新状态
+    {:ok, new_state}  # 返回响应和新的状态
+    # 可以简写如下形式
+    # {:ok, Map.put(state, key, value)}
+  end
+  def handle_call({:get, key}, state) do
+    value = Map.get(state, key)  # 获取值
+    {:ok, value, state}  # 返回响应和当前状态
+    # 可以简写如下形式
+    # {:ok, Map.get(state, key)}
+  end
+end
