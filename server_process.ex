@@ -42,4 +42,17 @@ defmodule KeyValueStore do
     # 可以简写如下形式
     # {Map.get(state, key) ,state}
   end
+
+  def start do
+    ServerProcess.start(__MODULE__)  # 启动服务器进程，传入当前模块作为回调模块
+  end
+
+  def put(server_pid, key, value) do
+    ServerProcess.call(server_pid, {:put, key, value})  # 调用服务器进程的 put 方法
+  end
+
+  def get(server_pid, key) do
+    ServerProcess.call(server_pid, {:get, key})  # 调用服务器进程的 get 方法
+  end
+
 end
