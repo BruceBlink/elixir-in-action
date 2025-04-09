@@ -16,4 +16,12 @@ defmodule ServerProce do
     end
   end
 
+  def call(server_pid, request) do
+    send(server_pid, {request, self()})  # 发送请求和调用者的 PID
+    receive do
+      {:response, response} -> # 等待响应
+        response  # 返回响应
+    end
+  end
+
 end
